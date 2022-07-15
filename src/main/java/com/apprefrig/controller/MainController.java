@@ -13,33 +13,40 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import software.amazon.awssdk.enhanced.dynamodb.model.Page;
+import software.amazon.awssdk.utils.Pair;
 
-@RestController //TODO gateway erro handler
+@RestController // TODO gateway error handler
 public class MainController {
 
 	@Autowired
 	OrdemServicoService ordemServicoService;
 
 	@GetMapping("/orders")
-	public ResponseEntity<Object> getOrders() {
-		
-		return ResponseEntity.status(HttpStatus.OK).body(ordemServicoService.getOrdens(20));
+	public ResponseEntity<Object> getAllOrders() {
+
+		return ResponseEntity.status(HttpStatus.OK).body(ordemServicoService.getAllOrdens(20));
 
 	}
-	
-	@GetMapping("/orders/{employee}") //TODO add employee not found response
+
+	@GetMapping("/orders/month")
+	public ResponseEntity<Object> getMonthOrders() {
+		
+		Pair<Integer,List<OrdemServico>> result =  ordemServicoService.getOrdensAllEmployeesCurrentMonth();
+		
+		return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count",String.valueOf(result.left())).body(result.right());
+
+	}
+
+	@GetMapping("/orders/month/{employee}") // TODO add employee not found response
 	public ResponseEntity<Object> getOrdersFuncionario(@PathVariable String employee) {
 		
-		int itensInPage = 10;
-		
-		List<Page<OrdemServico>> resultsIterator = ordemServicoService.getOrdensEmployeeCurrentMonth(employee,itensInPage);
-		
-		Integer totalSizeOfItens = (resultsIterator.size()-1)*itensInPage + resultsIterator.get(resultsIterator.size()-1).items().size();
-		
-		return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count",String.valueOf(totalSizeOfItens)).body(resultsIterator.get(0).items());
+		Pair<Integer, List<Page<OrdemServico>>> result =  ordemServicoService.getOrdensEmployeeCurrentMonth(employee);
+
+		return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count", String.valueOf(result.left()))
+				.body(result.right().get(0).items());
 
 	}
-	
+
 	@GetMapping("/")
 	public String Hello() {
 		return "App working!!!";
