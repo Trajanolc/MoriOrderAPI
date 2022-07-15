@@ -7,7 +7,7 @@
 		<version>2.7.1</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<groupId>com.apprefrig</groupId>
 	<artifactId>listorder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -54,7 +54,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-				<excludeDevtools>false</excludeDevtools>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -64,6 +63,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>app-refrig-api</finalName>
 	</build>
 
 </project>

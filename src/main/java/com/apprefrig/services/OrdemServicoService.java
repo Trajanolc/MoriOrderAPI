@@ -1,8 +1,9 @@
 package com.apprefrig.services;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.apprefrig.model.OrdemServico;
 import com.apprefrig.repository.DynamoDBRepositories;
@@ -38,37 +39,24 @@ public class OrdemServicoService {
 		return results;
 	}
 
-	public Iterable<OrdemServico> getOrdensFuncionario(String funcionario) {
-		
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH,1);
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);//set the calendar to fist day of month at 00:00:00
-		
+	public List<Page<OrdemServico>> getOrdensEmployeeCurrentMonth(String employee, int itensInPage) {
 		
 		AttributeValue attValDate = AttributeValue.builder()
-                .n(Long.toString( (c.getTimeInMillis()/1000 - 1645473084L) )) //Getting the fist order ID of month
+                .n(Long.toString( (CalendarService.getMonthStart().getTimeInMillis()/1000 - 1645473084L) )) //Getting the fist order ID of month
                 .build();
-		
-		QueryConditional queryDate = QueryConditional.sortGreaterThan(Key.builder().partitionValue(attValDate).build());
-
+	
 		AttributeValue attValKey = AttributeValue.builder()
-                .s(funcionario)
+                .s(employee)
                 .build();
 		
-		QueryConditional queryKey = QueryConditional.keyEqualTo(Key.builder().partitionValue(attValKey).build());
+		QueryConditional queryDate = QueryConditional.sortGreaterThan(Key.builder().partitionValue(attValKey).sortValue(attValDate).build());
 		
-		Optional<Page<OrdemServico>> resultsIterator = repository.index("FuncionarioID-ordemID-index").query(QueryEnhancedRequest.builder()
+		List<Page<OrdemServico>> resultsIterator = repository.index("FuncionarioID-ordemID-index").query(QueryEnhancedRequest.builder()
 				.queryConditional(queryDate)
-				.queryConditional(queryKey)
-				.limit(10)
-				.build()).stream().findFirst();
+				.scanIndexForward(false) // descending order
+				.limit(itensInPage) // number of items in page
+				.build()).stream().collect(Collectors.toList());
 		
-		ArrayList<OrdemServico> results = new ArrayList<OrdemServico>();
-
-		resultsIterator.ifPresent(it -> results.addAll(it.items()));
-
-		return results;
+		return resultsIterator;
 	}
 }

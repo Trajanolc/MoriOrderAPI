@@ -13,7 +13,7 @@ public class OrdemServico {
 	
 	private Integer ordemID;
 
-	private int DataFim;
+	private Long DataFim;
 	
 	
 	private String PAT;
@@ -54,11 +54,12 @@ public class OrdemServico {
 	}
 	
 	@DynamoDbSecondaryPartitionKey(indexNames = { "DataFim" })
-	public int getDataFim() {
+	@DynamoDbAttribute(value = "DataFim")
+	public Long getDataFim() {
 		return DataFim;
 	}
 
-	public void setDataFim(int dataFim) {
+	public void setDataFim(Long dataFim) {
 		this.DataFim = dataFim;
 	}
 	
