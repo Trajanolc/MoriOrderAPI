@@ -1,10 +1,12 @@
 package com.apprefrig.repository;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.apprefrig.enums.HCredentials;
 import com.apprefrig.model.OrdemServico;
+import com.apprefrig.model.OrdemServicoEmpresa;
+import com.apprefrig.model.OrdemServicoFuncionario;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -16,23 +18,38 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
 public class DynamoDBRepositories {
-
+	
+	
+	static String table = "ordemServico-test";
 
 	@Bean
-	public static DynamoDbTable<OrdemServico> ordemServicoRepository() {
-		return enhancedClient().table("ordemServico-test", TableSchema.fromBean(OrdemServico.class));
+	public
+	static DynamoDbTable<OrdemServicoFuncionario> ordemServicoFuncionarioRepository() {
+		return enhancedClient().table(table, TableSchema.fromBean(OrdemServicoFuncionario.class));
 	}
 	
+	@Bean
+	public
+	static DynamoDbTable<OrdemServicoEmpresa> ordemServicoEmpresaRepository() {
+		return enhancedClient().table(table, TableSchema.fromBean(OrdemServicoEmpresa.class));
+	}
+
+    @Bean
+	public
+    static DynamoDbTable<OrdemServico> ordemServicoRepository() {
+        return enhancedClient().table(table, TableSchema.fromBean(OrdemServico.class));
+    }
+	
 	
 	@Bean
-	public static DynamoDbEnhancedClient enhancedClient() {
+	private static DynamoDbEnhancedClient enhancedClient() {
 
 		return DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoClient()).build();
 
 	}
 
 	@Bean
-	public static DynamoDbClient dynamoClient() {
+	private static DynamoDbClient dynamoClient() {
 		DynamoDbClient ddb = DynamoDbClient.builder().credentialsProvider(credentialsProvider()).region(regionAWS())
 				.build();
 		return ddb;

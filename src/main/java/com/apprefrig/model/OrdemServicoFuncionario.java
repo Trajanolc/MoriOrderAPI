@@ -2,17 +2,17 @@ package com.apprefrig.model;
 
 import java.util.List;
 
-import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondarySortKey;
 
 @DynamoDbBean
-public class OrdemServico {
-	@NonNull
-	private Integer ordemID;
+public class OrdemServicoFuncionario extends OrdemServico{
 	
-	@NonNull
+	private Integer ordemID;
+
 	private Long DataFim;
 	
 	
@@ -20,16 +20,13 @@ public class OrdemServico {
 	
 	private Float gas_KG;
 	
-	@NonNull
+	
 	private String instalacao;
 	
-	@NonNull
 	private String local;
 	
-	@NonNull
 	private String equipamento;
 	
-	@NonNull
 	private String funcionarioID;
 	
 	private String OBS;
@@ -44,7 +41,11 @@ public class OrdemServico {
 	
 	private List<String> fotosDepois;
 	
+	public OrdemServicoFuncionario() {
+		super();
+	}
 	
+	@DynamoDbSecondarySortKey(indexNames = { "FuncionarioID-ordemID-index" })
 	@DynamoDbPartitionKey
 	public Integer getOrdemID() {
 		return ordemID;
@@ -54,6 +55,7 @@ public class OrdemServico {
 		this.ordemID = ordemID;
 	}
 	
+	@DynamoDbSecondaryPartitionKey(indexNames = { "DataFim" })
 	@DynamoDbAttribute(value = "DataFim")
 	public Long getDataFim() {
 		return DataFim;
@@ -98,7 +100,7 @@ public class OrdemServico {
 		this.equipamento = equipamento;
 	}
 	
-
+	@DynamoDbSecondaryPartitionKey(indexNames = { "FuncionarioID-ordemID-index" })
 	@DynamoDbAttribute(value = "FuncionarioID")
 	public String getFuncionarioID() {
 		return funcionarioID;
@@ -162,7 +164,7 @@ public class OrdemServico {
 	public List<String> getFotosDepois() {
 		return fotosDepois;
 	}
-	
+
 	@DynamoDbAttribute(value = "gas_KG")
 	public Float getGas_KG() {
 		return gas_KG;
@@ -172,4 +174,9 @@ public class OrdemServico {
 		this.gas_KG = gas_KG;
 	}
 
+	
+
+	
+	
+	
 }
