@@ -34,11 +34,11 @@ public class OrderCompanyController {
 	
 	@GetMapping("/company/month/{company}") // TODO add employee not found response
 	public ResponseEntity<Object> getOrdersCompany(@PathVariable String company) {
-		
 		if(company.equals("EQUATORIAL")){
 
 			
 			Pair<Integer, List<OrdemServicoEmpresa>> result =  ordemServicoServiceEmpresa.getOrdensEquatorialCurrentMonth(company);
+			
 			return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count", String.valueOf(result.left()))
 					.body(result.right());
 		}

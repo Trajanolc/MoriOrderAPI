@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 public class DynamoDBRepositories {
 	
 	
-	static String table = "ordemServico-test";
+	static String table = "ordemServico";
 
 	@Bean
 	public

@@ -1,6 +1,8 @@
 package com.apprefrig.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,7 +96,14 @@ public class OrdemServicoEmpresaService {
 	}
 
 	public Pair<Integer, List<OrdemServicoEmpresa>> getOrdensEquatorialCurrentMonth(String company) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> listOfCompanys = Arrays.asList("SEDE","SUB ESTAÇAO","AGENCIA");
+		
+		List<OrdemServicoEmpresa> resultsPerCompany = new ArrayList<OrdemServicoEmpresa>(); // Temporary list
+		
+		listOfCompanys.forEach(place -> resultsPerCompany.addAll(getOrdensCompanyCurrentMonth(place).right())); 
+		
+		Collections.sort(resultsPerCompany, (o1, o2) -> o2.getOrdemID().compareTo(o1.getOrdemID()));
+		
+		return Pair.of(resultsPerCompany.size(), resultsPerCompany);
 	}
 }

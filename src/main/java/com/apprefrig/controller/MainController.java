@@ -57,6 +57,7 @@ public class MainController {
 
 	}
 	
+	
 	@PatchMapping("/orders")
 	public ResponseEntity<Object> updateOrder(@RequestBody OrdemServico order){
 		try {
@@ -70,6 +71,9 @@ public class MainController {
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 
 	}
+	
+	//@DeleteMapping("/orders/{orderID}")
+	
 
 
 	//-----------------------------------just for testing ------------------------------------------
