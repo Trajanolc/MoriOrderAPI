@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import software.amazon.awssdk.utils.Pair;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController // TODO gateway error handler
+@RestController
 public class MainController {
 
 	@Autowired
@@ -42,6 +43,7 @@ public class MainController {
 
 	}
 	
+	
 	@PostMapping("/orders")
 	public ResponseEntity<Object> addOrder(@RequestBody OrdemServico order){
 		try {
@@ -52,9 +54,21 @@ public class MainController {
 		}
 
 		return ResponseEntity.status(HttpStatus.CREATED).body("Ordem adcionada com sucesso!");
-		
-			
-		
+
+	}
+	
+	@PatchMapping("/orders")
+	public ResponseEntity<Object> updateOrder(@RequestBody OrdemServico order){
+		try {
+			ordemServicoService.updatedOrder(order);
+			System.out.println("chegou aq");
+		}
+		catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+
 	}
 
 

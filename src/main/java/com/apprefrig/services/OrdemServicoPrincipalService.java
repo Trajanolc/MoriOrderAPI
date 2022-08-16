@@ -33,4 +33,12 @@ public class OrdemServicoPrincipalService {
 		repository.putItem(order);
 
 	}
+
+	public void updatedOrder(OrdemServico order) throws ModelException {
+		if (Objects.isNull(order.getFuncionarioID()))
+			throw new ModelException("Necessario funcionário para inserir ordem.");
+		
+		repository.putItem(order);
+		
+	}
 }
