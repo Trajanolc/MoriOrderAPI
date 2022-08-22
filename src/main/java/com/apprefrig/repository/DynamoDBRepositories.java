@@ -18,29 +18,24 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
 public class DynamoDBRepositories {
-	
-	
+
 	static String table = "ordemServico-test";
 
 	@Bean
-	public
-	static DynamoDbTable<OrdemServicoFuncionario> ordemServicoFuncionarioRepository() {
+	public static DynamoDbTable<OrdemServicoFuncionario> ordemServicoFuncionarioRepository() {
 		return enhancedClient().table(table, TableSchema.fromBean(OrdemServicoFuncionario.class));
 	}
-	
+
 	@Bean
-	public
-	static DynamoDbTable<OrdemServicoEmpresa> ordemServicoEmpresaRepository() {
+	public static DynamoDbTable<OrdemServicoEmpresa> ordemServicoEmpresaRepository() {
 		return enhancedClient().table(table, TableSchema.fromBean(OrdemServicoEmpresa.class));
 	}
 
-    @Bean
-	public
-    static DynamoDbTable<OrdemServico> ordemServicoRepository() {
-        return enhancedClient().table(table, TableSchema.fromBean(OrdemServico.class));
-    }
-	
-	
+	@Bean
+	public static DynamoDbTable<OrdemServico> ordemServicoRepository() {
+		return enhancedClient().table(table, TableSchema.fromBean(OrdemServico.class));
+	}
+
 	@Bean
 	private static DynamoDbEnhancedClient enhancedClient() {
 

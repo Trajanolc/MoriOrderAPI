@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,9 +30,6 @@ public class MainController {
 	@Autowired
 	OrdemServicoPrincipalService ordemServicoService;
 	
-	@Autowired
-	UserDetailsManager userDetails;
-
 
 	
 	// ----------------------------------- All ---------------------------------
@@ -76,14 +72,24 @@ public class MainController {
 
 	}
 	
-	//@DeleteMapping("/orders/{orderID}")
-	
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/orders/{orderID}")
+	public ResponseEntity<Object> deleteOrder(@RequestBody OrdemServico order){
+		try {
+			ordemServicoService.deleteOrder(order);
+		}
+		catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+
+	}
 	
 	
 	//------------------------------------Security-------------------------------------------------
 	
 	@GetMapping("/user")
-	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<Object> checkUser(){
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}

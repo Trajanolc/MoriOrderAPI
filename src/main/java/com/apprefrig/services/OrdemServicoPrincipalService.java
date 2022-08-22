@@ -41,4 +41,12 @@ public class OrdemServicoPrincipalService {
 		repository.putItem(order);
 		
 	}
+
+	public void deleteOrder(OrdemServico order) throws ModelException {
+		if (Objects.isNull(order.getOrdemID()))
+			throw new ModelException("Necessário id de ordem");
+		
+		repository.deleteItem(order);
+		
+	}
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,12 @@ public class CalendarService {
 		LocalDate date = LocalDate.ofInstant(Instant.ofEpochMilli(epoch), ZoneId.of("GMT-3"));
 		return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
+	
+	public static Date getOneMonthFromNow() {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MONTH, 1);
+		return c.getTime();
+	}
+	
 
 }
