@@ -1,6 +1,7 @@
 package com.apprefrig.repository;
 
 import com.apprefrig.enums.HCredentials;
+import com.apprefrig.model.Equipamento;
 import com.apprefrig.model.OrdemServico;
 import com.apprefrig.model.OrdemServicoEmpresa;
 import com.apprefrig.model.OrdemServicoFuncionario;
@@ -20,24 +21,31 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 public class DynamoDBRepositories {
 	
 	
-	static String table = "ordemServico";
+	static String tableOrder = "ordemServico";
+
+	static String tableEquips = "historicoEquipamento";
+
+	@Bean(value = "equipTable")
+	public static DynamoDbTable<Equipamento> equipTable() {
+		return enhancedClient().table(tableEquips, TableSchema.fromBean(Equipamento.class));
+	}
 
 	@Bean
 	public
 	static DynamoDbTable<OrdemServicoFuncionario> ordemServicoFuncionarioRepository() {
-		return enhancedClient().table(table, TableSchema.fromBean(OrdemServicoFuncionario.class));
+		return enhancedClient().table(tableOrder, TableSchema.fromBean(OrdemServicoFuncionario.class));
 	}
 	
 	@Bean
 	public
 	static DynamoDbTable<OrdemServicoEmpresa> ordemServicoEmpresaRepository() {
-		return enhancedClient().table(table, TableSchema.fromBean(OrdemServicoEmpresa.class));
+		return enhancedClient().table(tableOrder, TableSchema.fromBean(OrdemServicoEmpresa.class));
 	}
 
     @Bean
 	public
     static DynamoDbTable<OrdemServico> ordemServicoRepository() {
-        return enhancedClient().table(table, TableSchema.fromBean(OrdemServico.class));
+        return enhancedClient().table(tableOrder, TableSchema.fromBean(OrdemServico.class));
     }
 	
 	

@@ -42,6 +42,16 @@ public class MainController {
 		return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count",String.valueOf(result.left())).body(result.right());
 
 	}
+
+	@GetMapping("/orders/month/before")
+	public ResponseEntity<Object> getMonthBeforeOrders() {
+
+
+		Pair<Integer,List<OrdemServicoFuncionario>> result =  ordemServicoServiceEmployee.getOrdensAllEmployeesMonthBefore();
+
+		return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count",String.valueOf(result.left())).body(result.right());
+
+	}
 	
 	
 	@PostMapping("/orders")

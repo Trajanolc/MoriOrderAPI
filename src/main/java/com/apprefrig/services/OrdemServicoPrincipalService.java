@@ -1,5 +1,6 @@
 package com.apprefrig.services;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import com.apprefrig.exceptions.ModelException;
@@ -18,6 +19,8 @@ public class OrdemServicoPrincipalService {
 	@Autowired
 	DynamoDbTable<OrdemServico> repository = DynamoDBRepositories.ordemServicoRepository();
 
+	EquipServices equipServices = new EquipServices();
+
 	public void addOrder(@NonNull OrdemServico order) throws Exception {
 
 		if (Objects.isNull(order.getDataFim()))
@@ -31,6 +34,10 @@ public class OrdemServicoPrincipalService {
 			throw new ModelException("Necessario funcionário para inserir ordem.");
 
 		repository.putItem(order);
+
+		String[] equipArray = order.getEquipamento().split(" - ");
+
+		equipServices.addHistoric(equipArray[equipArray.length-1], order.getInstalacao(), order.getOrdemID().toString());
 
 	}
 

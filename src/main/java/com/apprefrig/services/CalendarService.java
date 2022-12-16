@@ -21,16 +21,24 @@ public class CalendarService {
 		
 		return c;
 	}
+
+	public static Calendar getMonthBeforeStart() {
+
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.DAY_OF_MONTH,1);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.add(Calendar.MONTH, -1);//set the calendar to fist day of month at 00:00:00
+
+		return c;
+	}
 	
 	public static Calendar getOneMonthAgo() {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MONTH, -1);
 		return c;
 	}
-	
-	public static String getDateFromMilis(Long epoch) {
-		LocalDate date = LocalDate.ofInstant(Instant.ofEpochMilli(epoch), ZoneId.of("GMT-3"));
-		return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-	}
+
 
 }

@@ -1,10 +1,6 @@
 package com.apprefrig.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.apprefrig.model.OrdemServicoFuncionario;
@@ -89,6 +85,70 @@ public class OrdemServicoFuncionarioService {
 
 		// Add all orders off all pages to result
 		resultsIterator.forEach(page -> page.items().forEach(order -> listOrder.add(order)));
+
+		return Pair.of(totalSizeOfItens, listOrder);
+
+	}
+
+	public Pair<Integer, List<OrdemServicoFuncionario>> getOrdensAllEmployeesMonthBefore() {
+
+		List<String> listOfEmployees = Arrays.asList("matheus", "elias", "geronildo", "thalisson","rayssa","ruan","marcos"); // TODO retrieve as
+		// checkbox in final
+		// app
+
+		List<OrdemServicoFuncionario> resultsPerEmployee = new ArrayList<OrdemServicoFuncionario>(); // Temporary list
+
+		listOfEmployees.forEach(employee -> resultsPerEmployee.addAll(getOrdensEmployeeMonthBefore(employee).right())); // call
+		// employee
+		// function
+
+		Collections.sort(resultsPerEmployee, (o1, o2) -> o2.getOrdemID().compareTo(o1.getOrdemID())); // Sort by OrderID
+
+		return Pair.of(resultsPerEmployee.size(), resultsPerEmployee);
+	}
+
+	public Pair<Integer, List<OrdemServicoFuncionario>> getOrdensEmployeeMonthBefore(String employee) {
+
+		Calendar test = CalendarService.getMonthBeforeStart();
+
+		long test2 = test.getTimeInMillis();
+
+		AttributeValue attValDateStart = AttributeValue.builder()
+				.n(Long.toString((CalendarService.getMonthBeforeStart().getTimeInMillis() / 1000 - 1645473084L))) // Getting
+				// the fist
+				// order ID
+				// of month
+				.build();
+
+		AttributeValue attValDateEnd = AttributeValue.builder()
+				.n(Long.toString((CalendarService.getMonthStart().getTimeInMillis() / 1000 - 1645473084L))) // Getting
+				// the fist
+				// order ID
+				// of month
+				.build();
+
+
+		AttributeValue attValKey = AttributeValue.builder().s(employee).build();
+
+		Key keyStart = Key.builder().partitionValue(attValKey).sortValue(attValDateStart).build();
+
+		Key keyEnd = Key.builder().partitionValue(attValKey).sortValue(attValDateEnd).build();
+
+		QueryConditional queryDate = QueryConditional.sortBetween(keyStart,keyEnd);
+
+		List<Page<OrdemServicoFuncionario>> resultsIterator = repository.index(repositoryIndex)
+				.query(QueryEnhancedRequest.builder().queryConditional(queryDate).scanIndexForward(false) // descending
+						// order
+						.limit(itensInPage) // number of items in page
+						.build())
+				.stream().collect(Collectors.toList());
+
+		Integer totalSizeOfItens = PageServices.getTotalSizeEmployee(resultsIterator, itensInPage);
+
+		List<OrdemServicoFuncionario> listOrder = new ArrayList<OrdemServicoFuncionario>(); // Final list with formated dates
+
+		// Add all orders off all pages to result
+		resultsIterator.forEach(page -> listOrder.addAll(page.items()));
 
 		return Pair.of(totalSizeOfItens, listOrder);
 
