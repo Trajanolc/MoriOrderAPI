@@ -24,6 +24,8 @@ public class OrderEmployeeController {
 	
 	@GetMapping("/orders/latest/{employee}")
 	public ResponseEntity<Object> getLatestOrderPerEmployee(@PathVariable String employee) {
+
+		employee = employee.replace("-"," ");
 		
 		Pair<Integer, List<OrdemServicoFuncionario>> result =  ordemServicoServiceEmployee.getOrdensEmployeeLatest(employee);
 
@@ -34,6 +36,8 @@ public class OrderEmployeeController {
 	
 	@GetMapping("/orders/month/{employee}") // TODO add employee not found response
 	public ResponseEntity<Object> getOrdersFuncionario(@PathVariable String employee) {
+
+		employee = employee.replace("-"," ");
 		
 		Pair<Integer, List<OrdemServicoFuncionario>> result =  ordemServicoServiceEmployee.getOrdensEmployeeCurrentMonth(employee);
 		return ResponseEntity.status(HttpStatus.OK).header("X-Total-Count", String.valueOf(result.left()))

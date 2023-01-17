@@ -43,7 +43,7 @@ public class OrdemServicoFuncionarioService {
 
 	public Pair<Integer, List<OrdemServicoFuncionario>> getOrdensAllEmployeesCurrentMonth() {
 
-		List<String> listOfEmployees = Arrays.asList("matheus", "elias", "geronildo", "thalisson","rayssa","ruan","marcos"); // TODO retrieve as
+		List<String> listOfEmployees = Arrays.asList("matheus", "elias", "geronildo", "thalisson","rayssa","ruan","marcos" , "elias padilha", "geronildo reis"); // TODO retrieve as
 																									// checkbox in final
 																									// app
 
