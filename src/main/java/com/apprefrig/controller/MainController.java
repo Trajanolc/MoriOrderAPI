@@ -72,7 +72,6 @@ public class MainController {
 	public ResponseEntity<Object> updateOrder(@RequestBody OrdemServico order){
 		try {
 			ordemServicoService.updatedOrder(order);
-			System.out.println("chegou aq");
 		}
 		catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

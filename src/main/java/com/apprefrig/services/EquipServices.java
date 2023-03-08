@@ -12,12 +12,12 @@ import java.text.Normalizer.Form;
 @Service
 public class EquipServices {
 
-    private DynamoDbTable<Equipamento> equipTable = DynamoDBRepositories.equipTable();
+    private final DynamoDbTable<Equipamento> equipTable = DynamoDBRepositories.equipTable();
 
     public void addHistoric(String TAG, String instalacao, String orderID){
         if(instalacao.equals("equatorial")) instalacao = "SEDE";
 
-        if (instalacao.equalsIgnoreCase("SEDE") || instalacao.equalsIgnoreCase("AGROPALMA")) {
+        if (instalacao.equalsIgnoreCase("SEDE") || instalacao.equalsIgnoreCase("AGROPALMA") || instalacao.equalsIgnoreCase("COPAGAZ")) {
 
             instalacao = instalacao.toUpperCase();
 
