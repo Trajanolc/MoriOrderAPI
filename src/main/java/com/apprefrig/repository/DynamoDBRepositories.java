@@ -1,6 +1,5 @@
 package com.apprefrig.repository;
 
-import com.apprefrig.enums.HCredentials;
 import com.apprefrig.model.Equipamento;
 import com.apprefrig.model.OrdemServico;
 import com.apprefrig.model.OrdemServicoEmpresa;
@@ -58,9 +57,8 @@ public class DynamoDBRepositories {
 
 	@Bean
 	private static DynamoDbClient dynamoClient() {
-		DynamoDbClient ddb = DynamoDbClient.builder().credentialsProvider(credentialsProvider()).region(regionAWS())
+		return DynamoDbClient.builder().credentialsProvider(credentialsProvider()).region(regionAWS())
 				.build();
-		return ddb;
 	}
 
 	@Bean
@@ -70,7 +68,7 @@ public class DynamoDBRepositories {
 
 	@Bean
 	private static AwsBasicCredentials amazonAWSCredentials() {
-		return AwsBasicCredentials.create(HCredentials.AWS_ACCESS_KEY.key, HCredentials.AWS_SECRET_KEY.key);
+		return AwsBasicCredentials.create(System.getenv("AWS_ACCESS_KEY"), System.getenv("AWS_SECRET_KEY"));
 	}
 
 	@Bean
